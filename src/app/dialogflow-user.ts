@@ -1,22 +1,22 @@
 import { DialogflowUserOptions } from './dialogflow-user-options'
-export class DialogflowUser{
+export class DialogflowUser {
 
     public userStorage: string = JSON.stringify({ data: {} });
 
-    constructor(public id: string, public options: DialogflowUserOptions){}
+    constructor(public id: string, public options: DialogflowUserOptions) { }
 
-    get useCanvas() : boolean {
-        return this.options.useCanvas;
+    get name(): string {
+        return this.options.name || this.id;
     }
-    get lastSeen() : string {
+    get lastSeen(): string {
         return this.options.lastSeen;
     }
-    get locale() : string {
+    get locale(): string {
         return this.options.locale;
     }
 
     setUserStorage(userStorage: string) {
         this.userStorage = userStorage;
     }
-    
+
 }
