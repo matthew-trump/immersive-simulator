@@ -1,4 +1,5 @@
 import { DialogflowSession } from "./dialogflow-session";
+import { GoogleAssistantRequest } from './google-assistant-request';
 
 const INPUT_TYPE_KEYBOARD: String = "KEYBOARD";
 const INPUT_TYPE_VOICE: String = "VOICE";
@@ -13,7 +14,10 @@ export class DialogflowRequest {
         public inputType: string,
         public query: string) { }
 
-    getObject(): any {
+    get assistantRequest(): GoogleAssistantRequest {
+        return this.getObject();
+    }
+    getObject(): GoogleAssistantRequest {
         const obj: any = {
             user: {
                 userId: this.session.user.id,
@@ -79,7 +83,7 @@ export class DialogflowRequest {
             requestType: "SIMULATOR"
         }
 
-        if (this.session.user.useCanvas) {
+        if (this.session.customStage) {
             obj.surface.capabilities.push({
                 name: "actions.capability.CUSTOM_STAGE"
             });
