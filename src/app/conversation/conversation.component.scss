@@ -1,0 +1,108 @@
+.conversation{
+    display: flex;
+}
+
+.display{
+    flex-shrink: 0;
+   
+
+    .simulator{
+        width: 420px;
+        height: 750px;
+        margin-top: 0.5em;
+        margin-left: 2em;
+        padding: 0.8em;
+        padding-top: 1.6em;
+        padding-bottom: 1.6em;
+        border: 3px solid #333;
+        border-radius: 1em;
+        background-color: snow;
+
+        #iframe{
+            border: 1px solid #999;
+            width: 400px;
+            height: 700px;
+        }
+    }
+    .output{
+        font-weight: normal;
+        width: 420px;
+    }
+   
+}
+.controls{
+    h2{
+        font-size: 0.88em;
+        color: #333;
+        margin-bottom: 0.6em;
+
+    }
+    margin-left: 1.7em;
+}
+
+
+
+.user{
+    display: flex;
+    align-items: center;
+
+    button{
+        margin-left: 1em;
+    }
+}
+.user-details{
+    display: flex;
+    font-size: 0.9em;
+    color: #333;
+    margin-left: 2em;
+    div{
+        margin-right: 1em;
+        
+        label{
+            font-size: 0.8em;
+            color: #999;
+        }
+    }
+}
+.newUser{
+    display: inline-block;
+    button{
+        display: inline-block;
+        margin-left: 1em;
+    }
+   mat-form-field{
+        
+        margin-right: 1em;
+    }
+}
+
+.session{
+    h3{
+        font-weight: normal;
+        color: #666;
+        font-size: 0.8em;
+    }
+}
+.sessionControls{
+    mat-slide-toggle{
+        margin-left: 1em;
+    }
+}
+.sessionInfo{
+    display: flex;
+    div{
+        margin-right: 1em;
+        span{
+            font-size: 0.8em;
+            color: #333;
+        }
+        label{
+            font-size: 0.8em;
+            color: #999;
+        }
+    }
+
+}
+.sessionIntents{
+    margin-top: 1em;
+}
