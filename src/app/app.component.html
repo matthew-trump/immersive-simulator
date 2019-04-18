@@ -1,20 +1,96 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<mat-toolbar>
 
+  <h1 style="margin-left: 1em;">{{title}}</h1>
+
+  <ng-container *ngIf="authService.isLoggedIn()">
+    <ng-container *ngIf="(targets$|async) as targets">
+      <div class="target-selector">
+        <mat-form-field>
+          <mat-select [(value)]="current.targetName" (selectionChange)="updateTarget()">
+            <ng-container *ngFor="let target of targets">
+              <mat-option [value]="target">{{target}}</mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="(projects$|async) as projects">
+      <div class="target-selector">
+        <mat-form-field>
+          <mat-select [(value)]="current.projectName" (selectionChange)="updateProject()">
+            <ng-container *ngFor="let project of projects">
+              <mat-option [value]="project">{{project}}</mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <span class="example-fill-remaining-space"></span>
+
+  <div class="login" style="display: flex; align-items: center;" *ngIf="authService.isLoggedIn()">
+
+    <span style="display: flex; align-items: center; margin-right: 0.5em;">
+      <mat-icon>person</mat-icon>
+      {{authService.getLoggedInUser()}}
+    </span>
+
+    <span style="margin-left: 0.5em;"><a (click)="logout()">logout</a></span>
+
+  </div>
+
+  <div class="login" *ngIf="authService.isLoggedOut()"><a [routerLink]="['login']">login</a></div>
+
+</mat-toolbar>
+
+
+
+<div id="content">
+  <div id="left" class="column">
+
+    <ul class="navigationlinks">
+      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+        true}">
+        <span class='arrow'>&#9656;</span>
+        <a [routerLink]="['']">Home</a>
+      </li>
+
+      <ng-container *ngIf="authService.isLoggedIn()">
+
+        <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+          true}">
+          <span class='arrow'>&#9656;</span>
+          <a [routerLink]="['conversation']">Conversation</a>
+        </li>
+
+
+        <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+            true}">
+          <span class='arrow'>&#9656;</span>
+          <a [routerLink]="['config']">Config</a>
+        </li>
+
+
+
+      </ng-container>
+
+    </ul>
+  </div>
+
+
+
+  <div id="right" class="column">
+
+
+    <div class="loggedout" *ngIf="!authService.isLoggedIn()">
+      You are currently logged out. Please log in.
+    </div>
+
+
+
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
