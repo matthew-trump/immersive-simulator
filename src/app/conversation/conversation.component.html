@@ -1,0 +1,95 @@
+<div class="conversation" *ngIf="(projectConfigService.project$|async) as project">
+
+  <div class="display">
+    <mat-tab-group>
+      <mat-tab label="Output">
+        <div class="output">
+
+        </div>
+
+
+      </mat-tab>
+      <mat-tab label="Simulator">
+        <div class="simulator">
+
+        </div>
+      </mat-tab>
+
+
+    </mat-tab-group>
+
+  </div>
+
+  <div class="controls">
+    <h2>{{project.name}}</h2>
+    <div class="user-controls">
+
+      <div *ngIf="!newUser" class="user">
+
+
+        <mat-form-field>
+          <mat-label>user</mat-label>
+          <mat-select [(ngModel)]="user">
+            <mat-option *ngFor="let user of users" [value]="user">{{user.id}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="user-details" *ngIf="user">
+          <div><label>locale</label> {{user.locale}}</div>
+          <div><label>lastSeen</label> {{user.lastSeen ? user.lastSeen : 'undefined'}}</div>
+        </div>
+
+        <button mat-icon-button (click)="newUser=true">
+          <mat-icon>add</mat-icon>
+        </button>
+
+      </div>
+
+
+
+
+      <div *ngIf="newUser" class="newUser">
+
+
+        <mat-form-field>
+          <mat-label>locale</mat-label>
+          <mat-select [value]="newUserDefaults.locale" #newUserLocale>
+            <mat-option *ngFor="let locale of locales" [value]="locale">{{locale}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+
+        <mat-slide-toggle [checked]="newUserDefaults.returning" #newUserReturning>returning</mat-slide-toggle>
+
+        <button mat-raised-button
+          (click)="addUser({locale: newUserLocale.value, returning: newUserReturning.checked})">add</button>
+        <button mat-raised-button (click)="newUser=false">cancel</button>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="session" *ngIf="user">
+      <h3>session</h3>
+      <div *ngIf="!session" class="sessionControls">
+        <button mat-raised-button (click)="invoke()">invoke app</button>
+        <mat-slide-toggle *ngIf="allowCustomStage" [(ngModel)]="customStage">custom stage</mat-slide-toggle>
+      </div>
+      <div *ngIf="session">
+
+        <div class="sessionInfo">
+          <div><label>conversationId</label>&nbsp;<span>{{session.conversationId}}</span></div>
+          <div><label>custom stage</label>&nbsp;<span>{{session.customStage}}</span></div>
+        </div>
+
+        <div class="sessionIntents">
+          <button mat-raised-button (click)="quit()">quit</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
