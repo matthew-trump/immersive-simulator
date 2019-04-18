@@ -9,7 +9,24 @@ export const environment = {
     apiPath: "/api/",
     loginPath: "/login",
     configPath: "/api/config",
-  }
+
+  },
+  allowCustomStage: true,
+  customStageDefault: true,
+  users: [
+    {
+      name: "Test User Alpha",
+      id: "test-user-alpha",
+      lastSeen: (new Date()).toISOString(),
+      locale: 'en-US'
+    },
+    {
+      name: "Test User Beta",
+      id: "test-user-beta",
+      lastSeen: null,
+      locale: 'en-US'
+    }
+  ]
 };
 
 /*
