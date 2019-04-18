@@ -17,19 +17,23 @@ import { DialogflowSession } from './dialogflow-session';
 })
 export class DialogflowSessionService {
 
-    session : DialogflowSession;
+    private session: DialogflowSession;
 
-    constructor(){}
+    constructor() { }
 
-    getNewSession(user: DialogflowUser) : DialogflowSession {
-        this.session = new DialogflowSession(user, this.generateIdString());
+    getNewSession(user: DialogflowUser, customStage: boolean): DialogflowSession {
+        console.log("CUSTOM STAGE", customStage)
+        this.session = new DialogflowSession(user, this.generateIdString(), customStage);
         return this.session;
     }
-    getCurrentSession() : DialogflowSession{
+    getCurrentSession(): DialogflowSession {
         return this.session;
     }
+    resetSession(): void {
+        this.session = null;
+    }
 
-    generateIdString() : string {
+    generateIdString(): string {
         const length = 16;
         const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         let result = '';
