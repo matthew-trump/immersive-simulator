@@ -6,11 +6,10 @@ import { DialogflowRequest } from './dialogflow-request';
 import { tap, catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import { environment } from '../environments/environment';
-
 import { BehaviorSubject } from 'rxjs';
 import { DialogflowUser } from './dialogflow-user';
 import { DialogflowUserOptions } from './dialogflow-user-options';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +19,24 @@ export class DialogflowUserService {
     user: DialogflowUser;
     users: DialogflowUser[] = [];
 
-    constructor() { }
+    constructor() {
+        if (environment.users) {
+            this.users = environment.users.map(
+                (options: DialogflowUserOptions) => {
+                    console.log(options);
+                    return new DialogflowUser(options.id, options)
+                }
+            );
+            if (this.users.length > 0) {
+                this.user = this.users[0];
+            }
+
+        } else {
+            this.users = [];
+        }
+        console.log("USERS", this.users);
+
+    }
 
     getNewUser(options: DialogflowUserOptions) {
         this.user = new DialogflowUser(this.generateIdString(), options);
