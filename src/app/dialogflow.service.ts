@@ -34,12 +34,14 @@ export class DialogflowService {
                 text), options.extra);
     }
     sendTextQuery(projectId: string, text: string) {
-        return this.backendApiService.postToDialogflow(new DialogflowRequest(
-            projectId,
-            this.dialogflowSessionService.getCurrentSession(),
-            CONVERSATION_TYPE.ACTIVE,
-            ACTIONS_INTENT.TEXT,
-            INPUT_TYPE.KEYBOARD,
-            text));
+        return this.backendApiService.postToDialogflow(
+            new DialogflowRequest(
+                projectId,
+                this.dialogflowSessionService.getCurrentSession(),
+                CONVERSATION_TYPE.ACTIVE,
+                ACTIONS_INTENT.TEXT,
+                INPUT_TYPE.KEYBOARD,
+                text));
     }
+
 }
