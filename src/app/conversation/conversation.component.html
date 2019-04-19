@@ -4,7 +4,72 @@
     <mat-tab-group>
       <mat-tab label="Output">
         <div class="output">
+          <ul *ngIf="output" class="entries">
+            <li *ngFor="let entry of output">
+              <div class="errorEntry" *ngIf="entry.error">
+                {{entry.error}}
+              </div>
 
+              <ul class="entry" *ngIf="!entry.error">
+
+
+
+                <li>
+                  <label>intent</label>
+                  <span>{{entry.intent}}</span>
+                </li>
+
+                <li>
+                  <ng-container *ngIf="entry.immersive">
+                    <ul class="immersiveResponse">
+
+
+                      <li *ngIf="entry.loadImmersiveUrl">
+                        <label>loadImmersiveUrl</label>
+                        <div>{{entry.loadImmersiveUrl}}</div>
+                      </li>
+                      <li *ngIf="entry.updatedState">
+                        <label>updatedState</label>
+                        <ul class="updatedStateProperties">
+                          <li *ngFor="let propName of entry.updatedStateProperties">
+                            <label>
+                              {{propName}}
+                            </label>
+                            <ng-container *ngIf="!entry.updatedStateSubproperties[propName]">
+                              <span>
+                                {{entry.updatedState[propName]}}
+                              </span>
+                            </ng-container>
+                            <ng-container *ngIf="entry.updatedStateSubproperties[propName]">
+                              <ul class="updatedStateSubproperties"
+                                *ngFor="let subpropName of entry.updatedStateSubproperties[propName]">
+                                <li>
+                                  <label>
+                                    {{subpropName}}
+                                  </label>
+                                  <span>
+                                    {{entry.updatedState[propName][subpropName]}}
+                                  </span>
+                                </li>
+                              </ul>
+                            </ng-container>
+
+                          </li>
+                        </ul>
+
+                      </li>
+
+                    </ul>
+
+                  </ng-container>
+
+
+                </li>
+
+              </ul>
+
+            </li>
+          </ul>
         </div>
 
 
@@ -85,9 +150,24 @@
           <div><label>custom stage</label>&nbsp;<span>{{session.customStage}}</span></div>
         </div>
 
-        <div class="sessionIntents">
-          <button mat-raised-button (click)="quit()">quit</button>
-        </div>
+        <ul class="sessionIntents">
+          <ng-container *ngFor="let prompt of project.activePrompts">
+
+            <li>
+              <ng-container *ngIf="prompt.startsWith('$')">
+                <button mat-raised-button (click)="query(prompt,qText.value)">{{prompt}}</button>
+                &nbsp;
+                <input type="text" size="30" #qText>
+              </ng-container>
+              <ng-container *ngIf="!prompt.startsWith('$')">
+                <button mat-raised-button (click)="query(prompt,'')">{{prompt}}</button>
+              </ng-container>
+            </li>
+          </ng-container>
+
+
+          <li><button mat-raised-button (click)="quit()">quit</button></li>
+        </ul>
       </div>
     </div>
 
