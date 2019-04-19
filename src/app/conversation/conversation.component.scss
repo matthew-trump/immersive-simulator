@@ -27,6 +27,69 @@
     .output{
         font-weight: normal;
         width: 420px;
+
+        .entries{
+            list-style-type: none;
+            margin-top: 0.5em;
+            padding-left: 0;
+            font-size: 0.85em;
+            
+        }
+        .errorEntry{
+            color: red;
+            border-bottom: 1px solid #ccc;
+        }
+        .entry{
+            label{
+                display: inline-block;
+                margin-right: 0.5em;
+                color: #666;
+            }
+            list-style-type: none;
+            margin-top: 0.5em;
+            padding-top: 0.5em;
+            border-bottom: 1px solid #ccc;
+            padding-left: 0em;
+
+           
+        }
+        .immersiveResponse{
+            > li{
+                display: flex;
+            }
+            label{
+                display: inline-block;
+                margin-right: 0.5em;
+                color: #666;
+            }
+            list-style-type: none;
+            margin-top: 0.5em;
+            padding-top: 0.5em;
+            padding-left: 0em;
+        }
+        .updatedStateProperties{
+           
+            label{
+                display: inline-block;
+                margin-right: 0.5em;
+                color: #666;
+            }
+            list-style-type: none;
+            margin-top: 0.5em;
+            padding-top: 0.5em;
+            padding-left: 1em;
+        }
+        .updatedStateSubproperties{
+            label{
+                display: inline-block;
+                margin-right: 0.5em;
+                color: #666;
+            }
+            list-style-type: none;
+            margin-top: 0.5em;
+            padding-top: 0.5em;
+            padding-left: 1.5em;
+        }
     }
    
 }
@@ -105,4 +168,9 @@
 }
 .sessionIntents{
     margin-top: 1em;
+    list-style-type: none;
+    padding-left: 0.3em;
+    li{
+        padding-bottom: 0.3em;
+    }
 }
