@@ -50,11 +50,13 @@ export class BackendApiService {
 
         return this.http.post(this.getBaseApiPath() + "dialogflow", obj).pipe(
             tap((data: any) => {
+                console.log(data);
                 dialogflowRequest.session.user.setUserStorage(data.userStorage);
             }),
             catchError(err => {
-                this.errorMessageService.send("DialogflowService error: " + err.message);
-                return of(null);
+                const message = err.error.error || err.message;
+                this.errorMessageService.send("DialogflowService error: " + message);
+                return of({ error: message });
             }),
             map(data => new DialogflowResponse(data))
         );
