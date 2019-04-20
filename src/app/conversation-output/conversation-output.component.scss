@@ -1,0 +1,40 @@
+.responses{
+    list-style-type: none;
+    margin-top: 0.5em;
+    padding-left: 0;
+    font-size: 0.85em; 
+}
+.error{
+    color: red;
+    padding-bottom: 0.3em;
+    border-bottom: 2px solid #333;
+}
+
+.response{
+    label{
+        display: inline-block;
+        margin-right: 0.5em;
+        color: blue;
+        opacity: 1;
+    }
+    list-style-type: none;
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+    border-bottom: 2px solid #333;
+    padding-left: 0em;
+    padding-bottom: 0.8em;
+
+}
+.items{
+    ul{
+        list-style-type: none;
+        padding-left: 0em;
+        margin-left: 0.5em;
+
+        >li{
+            border-top: 1px dotted #999;
+            padding-top: 0.2em;
+            margin-top: 0.5em;
+        }
+    }
+}

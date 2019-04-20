@@ -1,0 +1,36 @@
+<div class="output">
+
+  <ul *ngIf="responses" class="responses">
+    <li *ngFor="let response of responses">
+
+      <div class="error" *ngIf="response.error">
+        {{response.error}}
+      </div>
+
+      <ul class="response" *ngIf="!response.error">
+
+        <li class="intent">
+          <label>intent</label>
+          <span>{{response.intent}}</span>
+        </li>
+
+        <li class="items">
+
+          <ul>
+            <li *ngFor="let item of response.items">
+              <ng-container *ngIf="item.type===ITEM_TYPES.SIMPLE">
+                <conversation-output-simple-item [item]="item"></conversation-output-simple-item>
+              </ng-container>
+              <ng-container *ngIf="item.type===ITEM_TYPES.IMMERSIVE">
+                <conversation-output-immersive-item [item]="item"></conversation-output-immersive-item>
+              </ng-container>
+            </li>
+          </ul>
+
+        </li>
+
+      </ul>
+
+    </li>
+  </ul>
+</div>
