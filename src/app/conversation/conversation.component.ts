@@ -6,12 +6,14 @@ import { DialogflowSession } from '../dialogflow-session';
 import { ProjectConfigService } from '../project-config.service';
 import { DialogflowService } from '../dialogflow.service';
 import { DialogflowInvocationOptions } from '../dialogflow-invocation-options';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { ProjectConfig } from '../project-config';
 import { DialogflowSessionService } from '../dialogflow-session.service';
 import { environment } from 'src/environments/environment';
-import { DialogflowResponse } from '../dialogflow-response';
+import {
+  DialogflowResponse,
+} from '../dialogflow-response';
 
 const ALLOW_CUSTOM_STAGE: boolean = environment.allowCustomStage;
 const CUSTOM_STAGE_DEFAULT: boolean = environment.customStageDefault;
@@ -35,7 +37,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   customStage: boolean = ALLOW_CUSTOM_STAGE && CUSTOM_STAGE_DEFAULT;
 
 
-  output: any[] = [];
+  response$: BehaviorSubject<DialogflowResponse> = new BehaviorSubject(null);
   unsubscribe$: Subject<null> = new Subject();
 
   constructor(
@@ -89,7 +91,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
       .toPromise()
       .then((response: DialogflowResponse) => {
         if (response) {
-          this.parseResponse(response);
+          this.response$.next(response)
         }
       })
       .catch(err => {
@@ -99,22 +101,36 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
   invoke() {
     const customStage = this.customStage;
-    this.output = [];
+    this.response$.next(null);
     this.dialogflowService.sendInvocation(this.project.id, "take me to " + this.project.name, {
       customStage: customStage
     }).toPromise()
       .then((response: DialogflowResponse) => {
         if (response) {
-          this.parseResponse(response);
+          this.response$.next(response)
         }
       })
       .catch(err => {
         console.log("ERROR", err);
       })
   }
+  /**
   parseResponse(response: DialogflowResponse) {
     const intent = response.intent;
-    if (response.immersive) {
+    if (response.error) {
+      this.output.unshift({
+        error: response.error
+      });
+      console.log("ERROR response.immersiveResponse.loadImmersiveUrl not found.");
+      //this.errorMessage = "ERROR response.immersiveResponse.loadImmersiveUrl not found.";
+    } else{
+
+
+
+
+    } 
+    
+    if (response.immersiveResponse) {
       const updatedState = response.immersiveResponse.updatedState;
       const updatedStateProperties = Object.keys(updatedState);
       const updatedStateSubproperties: any = {};
@@ -134,16 +150,20 @@ export class ConversationComponent implements OnInit, OnDestroy {
         updatedStateSubproperties: updatedStateSubproperties
       }
       this.output.unshift(entry);
-    } else if (response.error) {
-      this.output.unshift({
-        error: response.error
-      });
-      console.log("ERROR response.immersiveResponse.loadImmersiveUrl not found.");
-      //this.errorMessage = "ERROR response.immersiveResponse.loadImmersiveUrl not found.";
+    } else if (response.simpleResponse) {
+      const entry: any = {
+        immersive: false,
+        intent: intent,
+        textToSpeech: response.simpleResponse.textToSpeech,
+        displayText: response.simpleResponse.displayText
+      }
+      this.output.unshift(entry);
     }
 
   }
+   */
   quit() {
+    this.response$.next(null);
     this.dialogflowSessionService.resetSession();
   }
   ngOnDestroy() {
