@@ -1,0 +1,39 @@
+<ul class="immersiveResponse" *ngIf="item">
+
+  <li *ngIf="item.loadImmersiveUrl">
+    <label>loadImmersiveUrl</label>
+    <div>{{item.loadImmersiveUrl}}</div>
+  </li>
+  <li *ngIf="item.updatedState">
+    <label>updatedState</label>
+    <ul class="updatedStateProperties" *ngIf="updatedStateProperties">
+      <li *ngFor="let propName of updatedStateProperties">
+        <label>
+          {{propName}}
+        </label>
+
+        <ng-container *ngIf="!updatedStateSubproperties[propName]">
+          <span>
+            {{item.updatedState[propName]}}
+          </span>
+        </ng-container>
+
+        <ng-container *ngIf="updatedStateSubproperties[propName]">
+          <ul class="updatedStateSubproperties" *ngFor="let subpropName of updatedStateSubproperties[propName]">
+            <li>
+              <label>
+                {{subpropName}}
+              </label>
+              <span>
+                {{item.updatedState[propName][subpropName]}}
+              </span>
+            </li>
+          </ul>
+        </ng-container>
+
+      </li>
+    </ul>
+
+  </li>
+
+</ul>
