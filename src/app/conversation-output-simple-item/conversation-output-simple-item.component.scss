@@ -1,0 +1,15 @@
+.simpleResponse{
+    > li{
+        display: flex;
+    }
+    label{
+        display: inline-block;
+        margin-right: 0.5em;
+        color: blue;
+        opacity: 0.8;
+    }
+    list-style-type: none;
+    margin-top: 0em;
+    padding-top: 0.25em;
+    padding-left: 0em;
+}

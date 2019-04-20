@@ -1,0 +1,14 @@
+<ul class="simpleResponse" *ngIf="item">
+  <li *ngIf="item.textToSpeech">
+    <label>textToSpeech</label>
+    <span>
+      {{item.textToSpeech}}
+    </span>
+  </li>
+  <li *ngIf="item.displayText">
+    <label>displayText</label>
+    <span>
+      {{item.displayText}}
+    </span>
+  </li>
+</ul>
