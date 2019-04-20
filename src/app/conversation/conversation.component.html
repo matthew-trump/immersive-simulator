@@ -4,74 +4,8 @@
     <mat-tab-group>
       <mat-tab label="Output">
         <div class="output">
-          <ul *ngIf="output" class="entries">
-            <li *ngFor="let entry of output">
-              <div class="errorEntry" *ngIf="entry.error">
-                {{entry.error}}
-              </div>
-
-              <ul class="entry" *ngIf="!entry.error">
-
-
-
-                <li>
-                  <label>intent</label>
-                  <span>{{entry.intent}}</span>
-                </li>
-
-                <li>
-                  <ng-container *ngIf="entry.immersive">
-                    <ul class="immersiveResponse">
-
-
-                      <li *ngIf="entry.loadImmersiveUrl">
-                        <label>loadImmersiveUrl</label>
-                        <div>{{entry.loadImmersiveUrl}}</div>
-                      </li>
-                      <li *ngIf="entry.updatedState">
-                        <label>updatedState</label>
-                        <ul class="updatedStateProperties">
-                          <li *ngFor="let propName of entry.updatedStateProperties">
-                            <label>
-                              {{propName}}
-                            </label>
-                            <ng-container *ngIf="!entry.updatedStateSubproperties[propName]">
-                              <span>
-                                {{entry.updatedState[propName]}}
-                              </span>
-                            </ng-container>
-                            <ng-container *ngIf="entry.updatedStateSubproperties[propName]">
-                              <ul class="updatedStateSubproperties"
-                                *ngFor="let subpropName of entry.updatedStateSubproperties[propName]">
-                                <li>
-                                  <label>
-                                    {{subpropName}}
-                                  </label>
-                                  <span>
-                                    {{entry.updatedState[propName][subpropName]}}
-                                  </span>
-                                </li>
-                              </ul>
-                            </ng-container>
-
-                          </li>
-                        </ul>
-
-                      </li>
-
-                    </ul>
-
-                  </ng-container>
-
-
-                </li>
-
-              </ul>
-
-            </li>
-          </ul>
+          <conversation-output [response$]="response$"></conversation-output>
         </div>
-
 
       </mat-tab>
       <mat-tab label="Simulator">
