@@ -31,6 +31,9 @@ import { LoginComponent } from './login/login.component';
 import { ConfigComponent } from './config/config.component';
 import { TestApiComponent } from './test-api/test-api.component';
 import { ConversationComponent } from './conversation/conversation.component';
+import { ConversationOutputComponent } from './conversation-output/conversation-output.component';
+import { ConversationOutputImmersiveItemComponent } from './conversation-output-immersive-item/conversation-output-immersive-item.component';
+import { ConversationOutputSimpleItemComponent } from './conversation-output-simple-item/conversation-output-simple-item.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { ConversationComponent } from './conversation/conversation.component';
     LoginComponent,
     ConfigComponent,
     TestApiComponent,
-    ConversationComponent
+    ConversationComponent,
+    ConversationOutputComponent,
+    ConversationOutputImmersiveItemComponent,
+    ConversationOutputSimpleItemComponent
   ],
   imports: [
     BrowserModule,
