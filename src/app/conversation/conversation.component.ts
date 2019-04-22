@@ -1,22 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DialogflowUser } from '../dialogflow-user';
+import { Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 import { DialogflowUserService } from '../dialogflow-user.service';
-import { DialogflowUserOptions } from '../dialogflow-user-options';
-import { DialogflowSession } from '../dialogflow-session';
 import { ProjectConfigService } from '../project-config.service';
 import { DialogflowService } from '../dialogflow.service';
-import { DialogflowInvocationOptions } from '../dialogflow-invocation-options';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
-import { ProjectConfig } from '../project-config';
 import { DialogflowSessionService } from '../dialogflow-session.service';
+import { ConversationService } from '../conversation.service';
+import { SimpleSimulatorService } from '../simple-simulator.service';
+import { ImmersiveSimulatorService } from '../immersive-simulator.service';
+import { ProjectConfig } from '../project-config';
+import { DialogflowUser } from '../dialogflow-user';
+import { DialogflowUserOptions } from '../dialogflow-user-options';
+import { DialogflowSession } from '../dialogflow-session';
+import { DialogflowResponse } from '../dialogflow-response';
 import { environment } from 'src/environments/environment';
-import {
-  DialogflowResponse,
-} from '../dialogflow-response';
 
 const ALLOW_CUSTOM_STAGE: boolean = environment.allowCustomStage;
 const CUSTOM_STAGE_DEFAULT: boolean = environment.customStageDefault;
+const SIMULATOR_ON_DEFAULT: boolean = environment.simulatorOnDefault;
+const SAVE_SCRIPT_DEFAULT: boolean = environment.saveScriptDefault;
+
 
 @Component({
   selector: 'app-conversation',
@@ -35,16 +38,21 @@ export class ConversationComponent implements OnInit, OnDestroy {
   newUser: boolean = false;
   allowCustomStage: boolean = ALLOW_CUSTOM_STAGE;
   customStage: boolean = ALLOW_CUSTOM_STAGE && CUSTOM_STAGE_DEFAULT;
+  saveScript: boolean = SAVE_SCRIPT_DEFAULT;
 
 
-  response$: BehaviorSubject<DialogflowResponse> = new BehaviorSubject(null);
   unsubscribe$: Subject<null> = new Subject();
+
+  simulatorOn: boolean = SIMULATOR_ON_DEFAULT;
 
   constructor(
     public dialogflowService: DialogflowService,
     public dialogflowUserService: DialogflowUserService,
     public dialogflowSessionService: DialogflowSessionService,
-    public projectConfigService: ProjectConfigService) { }
+    public projectConfigService: ProjectConfigService,
+    public coversationService: ConversationService,
+    public simpleSimulator: SimpleSimulatorService,
+    public immersiveSimulator: ImmersiveSimulatorService) { }
 
   ngOnInit() {
     this.projectConfigService.project$
@@ -68,7 +76,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
     return this.dialogflowUserService.users;
   }
   addUser(values: any) {
-    console.log("NEW USER", values);
     const options: DialogflowUserOptions = {
       locale: values.locale,
       lastSeen: values.returning ? (new Date()).toISOString() : null
@@ -81,91 +88,80 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.newUser = false;
     this.dialogflowSessionService.resetSession();
   }
-
-
-  query(prompt: string, qText: string) {
-    if (prompt.startsWith('$') && !qText.trim()) return;
-    const query: string = prompt + (qText ? (":" + qText.trim()) : "");
-    console.log("SEND TEXT QUERY", query);
-    this.dialogflowService.sendTextQuery(this.project.id, query)
-      .toPromise()
-      .then((response: DialogflowResponse) => {
-        if (response) {
-          this.response$.next(response)
-        }
-      })
-      .catch(err => {
-        console.log("ERROR", err);
-      })
-  }
-
   invoke() {
     const customStage = this.customStage;
-    this.response$.next(null);
+
+    this.sendInvocationToConversationOutput();
+    this.sendInvocationToSimulator();
+
     this.dialogflowService.sendInvocation(this.project.id, "take me to " + this.project.name, {
       customStage: customStage
     }).toPromise()
       .then((response: DialogflowResponse) => {
         if (response) {
-          this.response$.next(response)
+          this.sendResponseToConversationOutput(response);
+          this.sendResponseToSimulator(response);
         }
       })
       .catch(err => {
-        console.log("ERROR", err);
+        console.log("ConversationComopnent.invoke ERROR", err);
       })
   }
-  /**
-  parseResponse(response: DialogflowResponse) {
-    const intent = response.intent;
-    if (response.error) {
-      this.output.unshift({
-        error: response.error
-      });
-      console.log("ERROR response.immersiveResponse.loadImmersiveUrl not found.");
-      //this.errorMessage = "ERROR response.immersiveResponse.loadImmersiveUrl not found.";
-    } else{
 
+  sendInvocationToConversationOutput() {
+    this.coversationService.response$.next(null);
+  }
+  sendResponseToConversationOutput(response: DialogflowResponse) {
+    this.coversationService.response$.next(response);
+  }
+  sendInvocationToSimulator() {
+    if (this.simulatorOn && !this.customStage) {
+      this.simpleSimulator.invocation$.next(this.project);
+    }
+  }
+  sendQueryToSimulator(query: string) {
+    if (this.simulatorOn && !this.customStage) this.simpleSimulator.query$.next(query)
+  }
+  sendResponseToSimulator(response: DialogflowResponse) {
+    if (this.simulatorOn) {
+      if (this.customStage) {
+        this.immersiveSimulator.response$.next(response);
+      } else {
+        this.simpleSimulator.response$.next(response);
+      }
+    }
+  }
 
+  query(prompt: string, qText: string) {
+    if (prompt.startsWith('$') && !qText.trim()) return;
 
+    this.sendQueryToSimulator(qText ? qText : prompt);
 
-    } 
-    
-    if (response.immersiveResponse) {
-      const updatedState = response.immersiveResponse.updatedState;
-      const updatedStateProperties = Object.keys(updatedState);
-      const updatedStateSubproperties: any = {};
-      updatedStateProperties.map((propName: string) => {
-        const property = updatedState[propName];
-        if (typeof property === 'object') {
-          updatedStateSubproperties[propName] = Object.keys(updatedState[propName]);
+    this.dialogflowService.sendTextQuery(this.project.id, prompt + (qText ? (":" + qText.trim()) : ""))
+      .toPromise()
+      .then((response: DialogflowResponse) => {
+        if (response) {
+          this.sendResponseToConversationOutput(response);
+          this.sendResponseToSimulator(response);
         }
       })
-
-      const entry: any = {
-        immersive: true,
-        intent: intent,
-        loadImmersiveUrl: response.immersiveResponse.loadImmersiveUrl,
-        updatedState: updatedState,
-        updatedStateProperties: updatedStateProperties,
-        updatedStateSubproperties: updatedStateSubproperties
-      }
-      this.output.unshift(entry);
-    } else if (response.simpleResponse) {
-      const entry: any = {
-        immersive: false,
-        intent: intent,
-        textToSpeech: response.simpleResponse.textToSpeech,
-        displayText: response.simpleResponse.displayText
-      }
-      this.output.unshift(entry);
-    }
-
+      .catch(err => {
+        console.log("ConversationComopnent.query ERROR", err);
+      })
   }
-   */
   quit() {
-    this.response$.next(null);
-    this.dialogflowSessionService.resetSession();
+
+    this.dialogflowService.sendTextQuery(this.project.id, "quit").toPromise()
+      .then((response: DialogflowResponse) => {
+        this.sendResponseToConversationOutput(response)
+        this.dialogflowSessionService.resetSession();
+      })
+      .catch(err => {
+        console.log("ConversationComopnent.quit ERROR", err);
+        this.dialogflowSessionService.resetSession();
+      })
   }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
