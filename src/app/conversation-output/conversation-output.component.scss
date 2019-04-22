@@ -26,6 +26,7 @@
 
 }
 .items{
+
     ul{
         list-style-type: none;
         padding-left: 0em;
@@ -35,6 +36,28 @@
             border-top: 1px dotted #999;
             padding-top: 0.2em;
             margin-top: 0.5em;
+        }
+    }
+}
+.suggestions{
+    label{
+        color: blue;
+        opacity: 0.8;
+        font-size: 0.8em;
+    }
+    ul{
+        display: flex;
+        list-style-type: none;
+        margin-top: 0.6em;
+        li{
+            border: 1px solid blue;
+            padding: 0.5em;
+            margin-right: 0.5em;
+
+            span{
+                font-size: 0.75em;
+                color: #333;
+            }
         }
     }
 }
