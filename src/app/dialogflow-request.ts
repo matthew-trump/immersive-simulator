@@ -7,6 +7,7 @@ const INPUT_TYPE_VOICE: String = "VOICE";
 export class DialogflowRequest {
 
     constructor(
+        public requestId: number,
         public projectId: string,
         public session: DialogflowSession,
         public conversationType: string,
