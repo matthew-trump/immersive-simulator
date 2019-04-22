@@ -1,5 +1,5 @@
 {
-  "name": "dialogflow-testing-tool-frontend",
+  "name": "dialogflow-testing-tool",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
