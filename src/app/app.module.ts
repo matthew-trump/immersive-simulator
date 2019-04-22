@@ -34,6 +34,10 @@ import { ConversationComponent } from './conversation/conversation.component';
 import { ConversationOutputComponent } from './conversation-output/conversation-output.component';
 import { ConversationOutputImmersiveItemComponent } from './conversation-output-immersive-item/conversation-output-immersive-item.component';
 import { ConversationOutputSimpleItemComponent } from './conversation-output-simple-item/conversation-output-simple-item.component';
+import { SsmlFormattedComponent } from './ssml-formatted/ssml-formatted.component';
+import { ConversationOutputBasicCardItemComponent } from './conversation-output-basic-card-item/conversation-output-basic-card-item.component';
+import { SimpleSimulatorComponent } from './simple-simulator/simple-simulator.component';
+import { ImmersiveSimulatorComponent } from './immersive-simulator/immersive-simulator.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +48,11 @@ import { ConversationOutputSimpleItemComponent } from './conversation-output-sim
     ConversationComponent,
     ConversationOutputComponent,
     ConversationOutputImmersiveItemComponent,
-    ConversationOutputSimpleItemComponent
+    ConversationOutputSimpleItemComponent,
+    SsmlFormattedComponent,
+    ConversationOutputBasicCardItemComponent,
+    SimpleSimulatorComponent,
+    ImmersiveSimulatorComponent
   ],
   imports: [
     BrowserModule,
