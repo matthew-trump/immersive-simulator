@@ -27,5 +27,9 @@ export class ConversationOutputImmersiveItemComponent implements OnInit {
     }
 
   }
+  isSsml(value: string) {
+    return (typeof value === 'string') && value.trim().indexOf('<speak>') === 0;
+  }
+
 
 }
