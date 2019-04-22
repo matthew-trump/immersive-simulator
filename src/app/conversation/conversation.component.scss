@@ -7,16 +7,7 @@
    
 
     .simulator{
-        width: 420px;
-        height: 750px;
-        margin-top: 0.5em;
-        margin-left: 2em;
-        padding: 0.8em;
-        padding-top: 1.6em;
-        padding-bottom: 1.6em;
-        border: 3px solid #333;
-        border-radius: 1em;
-        background-color: snow;
+
 
         #iframe{
             border: 1px solid #999;
@@ -109,7 +100,14 @@
     margin-top: 1em;
     list-style-type: none;
     padding-left: 0.3em;
+    margin-right: 8em;
     li{
+        display: inline-block;
+        margin-left: 0.5em;
+        margin-top: 0.8em;
+    }
+    li.qtext{
+        display: block;
         padding-bottom: 0.3em;
     }
 }
