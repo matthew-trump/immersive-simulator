@@ -1,9 +1,7 @@
 <ul class="simpleResponse" *ngIf="item">
   <li *ngIf="item.textToSpeech">
     <label>textToSpeech</label>
-    <span>
-      {{item.textToSpeech}}
-    </span>
+    <ssml-formatted [ssml]="item.textToSpeech"></ssml-formatted>
   </li>
   <li *ngIf="item.displayText">
     <label>displayText</label>
