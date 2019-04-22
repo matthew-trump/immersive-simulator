@@ -13,9 +13,15 @@
         </label>
 
         <ng-container *ngIf="!updatedStateSubproperties[propName]">
-          <span>
-            {{item.updatedState[propName]}}
-          </span>
+          <ng-container *ngIf="isSsml(item.updatedState[propName]); else plain">
+            <ssml-formatted [ssml]="item.updatedState[propName]"></ssml-formatted>
+          </ng-container>
+          <ng-template #plain>
+            <span>
+              {{item.updatedState[propName]}}
+            </span>
+          </ng-template>
+
         </ng-container>
 
         <ng-container *ngIf="updatedStateSubproperties[propName]">
@@ -24,9 +30,16 @@
               <label>
                 {{subpropName}}
               </label>
-              <span>
-                {{item.updatedState[propName][subpropName]}}
-              </span>
+              <ng-container *ngIf="isSsml(item.updatedState[propName][subpropName]); else plain">
+                <ssml-formatted [ssml]="item.updatedState[propName][subpropName]"></ssml-formatted>
+              </ng-container>
+              <ng-template #plain>
+                <span>
+                  {{item.updatedState[propName][subpropName]}}
+                </span>
+              </ng-template>
+
+
             </li>
           </ul>
         </ng-container>
