@@ -1,0 +1,95 @@
+.simulator{
+    /**
+    border: 1px solid #ccc;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.5em;
+    **/
+    width: 420px;
+    height: 300px;
+    margin-top: 0.5em;
+    margin-left: 2em;
+    padding: 0.8em;
+    padding-top: 1.6em;
+    padding-bottom: 1.6em;
+    border: 3px solid #333;
+    border-radius: 1em;
+    background-color: snow;
+    overflow: scroll;
+
+
+    .readout{
+        width: 100%;
+        list-style-type: none;
+        padding-left: 0em;
+        padding-right: 3.5em;
+        margin-top: 0em;
+        display: flex;
+        flex-direction: column;
+        background: none ;
+        
+    
+
+        
+        li.query{
+            display: inline-block;
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+            padding-top: 0.15em;
+            padding-bottom: 0.25em;
+            border-radius: 1em;
+            margin-bottom: 0.4em;
+            span{
+                font-size: 0.7em;
+            }
+        }
+        li.assistant{
+            align-self: flex-start;
+           /** background-color:#3cba54 ; **/
+           background: none;
+           border: 1px solid #999;
+           color: #333;
+           margin-right: 6em;
+        }
+        li.user{
+            align-self: flex-end;
+            color: white;
+            background-color:#4885ed;
+            margin-left: 6em;
+        }
+        li.suggestions{
+            margin-top: 0.8em;
+            align-self: flex-start;
+            ul{
+                margin-top: 0;
+                padding-left: 0;
+                list-style-type: none;
+                display: flex;
+                justify-content: space-around;
+                li{
+                    display: inline-block;
+                    background: none;
+                    border: 1px solid #999;
+                    padding-left: 0.5em;
+                    padding-right: 0.5em;
+                    padding-top: 0.15em;
+                    padding-bottom: 0.25em;
+                    border-radius: 1em;
+                    margin-bottom: 0.4em;
+                    margin-right: 0.3em;
+                    span{
+                        font-size: 0.7em;
+                     }
+                }
+            }
+        }
+        li.card{
+            h4{
+                font-size: 1.0em;
+            }
+        }
+
+
+    }
+
+}

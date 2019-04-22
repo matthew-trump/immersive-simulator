@@ -1,0 +1,42 @@
+<ng-container *ngIf="(simulator.scroll$|async)">
+  <div class="simulator" #screen [scrollTop]="getScrollTop(screen)">
+    <ul class="readout" *ngIf="simulator.readout">
+      <ng-container *ngFor="let line of simulator.readout">
+        <ng-container *ngIf="line.query">
+          <li class="query" [ngClass]="{'assistant':line.actor===0,'user':line.actor===1}">
+            <span>{{line.query}}</span>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="line.card">
+          <li class="card">
+
+            <div>
+              <ng-container *ngIf="line.card.image">
+                <img height="192" src="{{line.card.image.url}}" alt="{{line.card.image.alt}}">
+              </ng-container>
+
+              <h3 *ngIf="line.card.title">{{line.card.title}}</h3>
+              <h4 *ngIf="line.card.subtitle">{{line.card.subtitle}}</h4>
+
+              <p *ngIf="line.card.text">
+                {{line.card.text}}
+              </p>
+
+            </div>
+
+          </li>
+        </ng-container>
+        <ng-container *ngIf="line.suggestions">
+          <li class="suggestions">
+            <ul>
+              <li *ngFor="let suggestion of line.suggestions">
+                <span>{{suggestion.title}}</span>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+      </ng-container>
+    </ul>
+
+  </div>
+</ng-container>
