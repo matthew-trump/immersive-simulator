@@ -43,6 +43,7 @@ export class BackendApiService {
 
         const obj: any = {
             target: this.target,
+            requestId: dialogflowRequest.requestId,
             projectId: dialogflowRequest.projectId,
             request: dialogflowRequest.assistantRequest,
             extra: extra
@@ -60,6 +61,9 @@ export class BackendApiService {
             }),
             map(data => new DialogflowResponse(data))
         );
+    }
+    postTextToSpeech(ssml: string): Observable<any> {
+        return this.http.post<any>(this.getBaseApiPath() + 'text-to-speech', { ssml: ssml })
     }
     ping(): Observable<TestApiResponse> {
         return this.http.get<TestApiResponse>(this.getBaseApiPath() + 'ping');
