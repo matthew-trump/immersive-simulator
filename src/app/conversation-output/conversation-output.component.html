@@ -1,7 +1,7 @@
 <div class="output">
 
-  <ul *ngIf="responses" class="responses">
-    <li *ngFor="let response of responses">
+  <ul *ngIf=" conversationService.responses" class="responses">
+    <li *ngFor="let response of conversationService.responses">
 
       <div class="error" *ngIf="response.error">
         {{response.error}}
@@ -24,6 +24,19 @@
               <ng-container *ngIf="item.type===ITEM_TYPES.IMMERSIVE">
                 <conversation-output-immersive-item [item]="item"></conversation-output-immersive-item>
               </ng-container>
+              <ng-container *ngIf="item.type===ITEM_TYPES.BASIC_CARD">
+                <conversation-output-basic-card-item [item]="item"></conversation-output-basic-card-item>
+              </ng-container>
+            </li>
+          </ul>
+
+        </li>
+
+        <li class="suggestions" *ngIf="response.suggestions">
+          <label>suggestions</label>
+          <ul>
+            <li *ngFor="let suggestion of response.suggestions">
+              <span>{{suggestion.title}}</span>
             </li>
           </ul>
 
