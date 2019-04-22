@@ -1,0 +1,35 @@
+<ul class="basicCard" *ngIf="item">
+  <li *ngIf="item.title">
+    <label>title</label>
+    <span>
+      {{item.title}}
+    </span>
+  </li>
+  <li *ngIf="item.image">
+    <label>image</label>
+    <ul class="image">
+      <li>
+        <label>
+          url
+        </label>
+        <span>
+          {{item.image.url}}
+        </span>
+      </li>
+      <li>
+        <label>
+          accessibilityText
+        </label>
+        <span>
+          {{item.image.accessibilityText}}
+        </span>
+      </li>
+    </ul>
+  </li>
+  <li *ngIf="item.imageDisplayOptions">
+    <label>imageDisplayOptions</label>
+    <span>
+      {{item.imageDisplayOptions}}
+    </span>
+  </li>
+</ul>

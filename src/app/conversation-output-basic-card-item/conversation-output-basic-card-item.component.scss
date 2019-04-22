@@ -1,0 +1,38 @@
+.basicCard{
+    list-style-type: none;
+    >li{
+        display: flex;
+        padding-bottom: 0.3em;
+    }
+    label{
+        display: inline-block;
+        margin-right: 0.5em;
+        color: blue;
+        opacity: 0.8;
+    }
+    span{
+        display: inline-block;
+    }
+  
+    margin-top: 0.3em;
+    padding-left: 0em;
+
+    .image{
+   
+        >li{
+            padding-bottom: 0.5m;
+        }
+        label{
+            display: inline-block;
+            margin-right: 0.5em;
+            color: blue;
+            opacity: 0.8;
+        }
+       
+        list-style-type: none;
+        margin-top: 0.8em;
+        padding-top: 0.5em;
+        padding-left: 0em;
+
+    }
+}
