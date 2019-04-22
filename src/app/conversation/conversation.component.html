@@ -2,16 +2,26 @@
 
   <div class="display">
     <mat-tab-group>
+
+      <mat-tab label="Simulator">
+
+        <mat-slide-toggle [(ngModel)]="simulatorOn">on</mat-slide-toggle>
+
+        <div class="simulator" *ngIf="simulatorOn">
+          <ng-container *ngIf="!customStage">
+            <simple-simulator></simple-simulator>
+          </ng-container>
+          <ng-container *ngIf="customStage">
+
+          </ng-container>
+        </div>
+      </mat-tab>
+
       <mat-tab label="Output">
         <div class="output">
-          <conversation-output [response$]="response$"></conversation-output>
+          <conversation-output></conversation-output>
         </div>
 
-      </mat-tab>
-      <mat-tab label="Simulator">
-        <div class="simulator">
-
-        </div>
       </mat-tab>
 
 
@@ -77,6 +87,7 @@
         <button mat-raised-button (click)="invoke()">invoke app</button>
         <mat-slide-toggle *ngIf="allowCustomStage" [(ngModel)]="customStage">custom stage</mat-slide-toggle>
       </div>
+
       <div *ngIf="session">
 
         <div class="sessionInfo">
@@ -87,7 +98,7 @@
         <ul class="sessionIntents">
           <ng-container *ngFor="let prompt of project.activePrompts">
 
-            <li>
+            <li [ngClass]="{'qtext':prompt.startsWith('$')}">
               <ng-container *ngIf="prompt.startsWith('$')">
                 <button mat-raised-button (click)="query(prompt,qText.value)">{{prompt}}</button>
                 &nbsp;
