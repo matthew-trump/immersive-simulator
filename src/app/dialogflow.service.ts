@@ -18,6 +18,8 @@ import { DialogflowSession } from './dialogflow-session';
 })
 export class DialogflowService {
 
+    requestIdCounter: number = 0;
+
     constructor(private backendApiService: BackendApiService,
         private dialogflowUserService: DialogflowUserService,
         private dialogflowSessionService: DialogflowSessionService
@@ -26,6 +28,7 @@ export class DialogflowService {
     sendInvocation(projectId: string, text: string, options: DialogflowInvocationOptions) {
         return this.backendApiService.postToDialogflow(
             new DialogflowRequest(
+                this.requestIdCounter++,
                 projectId,
                 this.dialogflowSessionService.getNewSession(this.dialogflowUserService.getCurrentUser(), options.customStage),
                 CONVERSATION_TYPE.NEW,
@@ -36,6 +39,7 @@ export class DialogflowService {
     sendTextQuery(projectId: string, text: string) {
         return this.backendApiService.postToDialogflow(
             new DialogflowRequest(
+                this.requestIdCounter++,
                 projectId,
                 this.dialogflowSessionService.getCurrentSession(),
                 CONVERSATION_TYPE.ACTIVE,
@@ -43,5 +47,6 @@ export class DialogflowService {
                 INPUT_TYPE.KEYBOARD,
                 text));
     }
+
 
 }
