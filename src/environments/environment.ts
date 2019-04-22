@@ -9,10 +9,13 @@ export const environment = {
     apiPath: "/api/",
     loginPath: "/login",
     configPath: "/api/config",
-
+    textToSpeechPath: "/api/text-to-speech"
   },
+  textToSpeech: true,
   allowCustomStage: true,
-  customStageDefault: true,
+  customStageDefault: false,
+  simulatorOnDefault: true,
+  saveScriptDefault: false,
   users: [
     {
       name: "Test User Alpha",
