@@ -1,0 +1,5 @@
+<div>
+  <ng-container *ngFor="let bar of bars;let i = index">
+    <span [ngStyle]="{'animation':animation(i),'left':left(i) }"></span>
+  </ng-container>
+</div>
