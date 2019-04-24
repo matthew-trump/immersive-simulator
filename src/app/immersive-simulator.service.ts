@@ -108,17 +108,6 @@ export class ImmersiveSimulatorService {
   }
 
 
-  loaded() {
-    this.message$
-      .pipe(
-        tap((message: any) => {
-          this.sendMessage(message);
-        }),
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe()
-  }
-
   get child() {
     return this.document.getElementById('iframe') ?
       this.document.getElementById('iframe').contentWindow : null;
@@ -128,8 +117,14 @@ export class ImmersiveSimulatorService {
 
       if (event.data.type === 'onload') {
         console.log("ImmersiveSimulator APP LOADED");
-        this.loaded();
-
+        this.message$
+          .pipe(
+            tap((message: any) => {
+              this.sendMessage(message);
+            }),
+            takeUntil(this.unsubscribe$)
+          )
+          .subscribe()
       } else if (event.data.type === 'send_text_query') {
         this.store.dispatch(new ImmersiveSimulatorAction("$any:" + event.data.query))
 
@@ -143,16 +138,6 @@ export class ImmersiveSimulatorService {
           speech: tts
         } as TextToSpeechRequest);
 
-        /** 
-        this.textToSpeechService.playAudio(requestId, tts)
-          .then((requestId: string) => {
-            this.sendOutputTtsStatus(requestId, "END");
-          })
-          .catch((err) => {
-            console.log("IMMERSIVE SIMULATOR TTS ERROR", err);
-            this.sendOutputTtsStatus(requestId, "END");
-          });
-          */
       } else if (event.data.type === 'onUpdateDone') {
 
       } else if (event.data.type === 'exit') {
