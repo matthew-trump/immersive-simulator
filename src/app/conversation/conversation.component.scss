@@ -19,12 +19,16 @@
    
 }
 .controls{
-    h2{
-        font-size: 0.88em;
-        color: #333;
-        margin-bottom: 0.6em;
-
+    .project{
+        display: flex;
+        h2{
+            font-size: 0.88em;
+            color: #333;
+            margin-bottom: 0.6em;
+    
+        }
     }
+    
     margin-left: 1.7em;
 }
 
