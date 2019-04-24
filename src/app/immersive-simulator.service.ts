@@ -1,8 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { tap, takeUntil } from 'rxjs/operators';
-import { ChildService } from './child.service';
-import { DialogflowResponse, DialogflowResponseItem, DialogflowImmersiveResponseItem, ITEM_TYPES } from './dialogflow-response';
+import { Store } from '@ngrx/store';
+import { DOCUMENT } from '@angular/common';
+import { WindowRefService } from './window-ref.service';
+import {
+  DialogflowResponse,
+  DialogflowResponseItem,
+  DialogflowSimpleResponseItem,
+  DialogflowImmersiveResponseItem,
+  ITEM_TYPES
+} from './dialogflow-response';
+import { TextToSpeechService } from './text-to-speech.service';
+import { TextToSpeechRequest, TextToSpeechQueue } from './text-to-speech-queue';
+import { ImmersiveSimulatorAction } from './immersive-simulator.action';
 
 const START_URL: string = "/assets/assistant.html";
 
@@ -11,12 +22,26 @@ const START_URL: string = "/assets/assistant.html";
 })
 export class ImmersiveSimulatorService {
 
+  textToSpeechQueue: TextToSpeechQueue;
+
   url$: BehaviorSubject<string> = new BehaviorSubject(START_URL);
   response$: BehaviorSubject<DialogflowResponse> = new BehaviorSubject(null);
   message$: BehaviorSubject<any>;
   unsubscribe$: Subject<null> = new Subject();
 
-  constructor(public childService: ChildService) {
+
+  textToSpeechCounter: number = -1;
+
+  constructor(
+    public store: Store<any>,
+    public windowRefService: WindowRefService,
+    public textToSpeechService: TextToSpeechService,
+    @Inject(DOCUMENT) private document: any) {
+
+    this.windowRefService.nativeWindow
+      .addEventListener("message",
+        this.receiveMessage.bind(this), false);
+
     this.reset();
 
     this.response$
@@ -41,7 +66,18 @@ export class ImmersiveSimulatorService {
                     data: updatedState
                   })
                 }
+              } else if (item.type === ITEM_TYPES.SIMPLE) {
+                const simpleResponse: DialogflowSimpleResponseItem = (item as DialogflowSimpleResponseItem);
+                if (simpleResponse.textToSpeech) {
+                  const requestId = this.textToSpeechCounter--;
+                  this.textToSpeechQueue.messages$.next({
+                    requestId: "" + requestId,
+                    speech: simpleResponse.textToSpeech
+                  } as TextToSpeechRequest);
+                }
               }
+
+
             })
           }
         })
@@ -50,31 +86,91 @@ export class ImmersiveSimulatorService {
 
   }
   reset() {
+    if (this.textToSpeechQueue) {
+      this.textToSpeechQueue.complete();
+    }
+    this.textToSpeechQueue = this.textToSpeechService.getQueue();
+    this.subscribeToTextToSpeechUpdate();
+
     this.url$.next(START_URL);
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.message$ = new BehaviorSubject(null);
     this.unsubscribe$ = new Subject();
   }
+  subscribeToTextToSpeechUpdate() {
+    this.textToSpeechQueue.update$.subscribe((requestId: string) => {
+      console.log("IMMERSIVE SIMULATOR textToSpeechQueue update", requestId);
+      if (parseInt(requestId) > -1) {
+        this.sendOutputTtsStatus(requestId, "END");
+      }
+    })
+  }
+
+
   loaded() {
     this.message$
       .pipe(
         tap((message: any) => {
-          this.childService.sendMessage(message);
+          this.sendMessage(message);
         }),
         takeUntil(this.unsubscribe$)
       )
       .subscribe()
   }
 
-  onChildQuery(query: string) {
-
+  get child() {
+    return this.document.getElementById('iframe') ?
+      this.document.getElementById('iframe').contentWindow : null;
   }
-  onChildTts(requestId: number, tts: string) {
+  receiveMessage(event: MessageEvent) {
+    if (event && event.data) {
 
+      if (event.data.type === 'onload') {
+        console.log("ImmersiveSimulator APP LOADED");
+        this.loaded();
+
+      } else if (event.data.type === 'send_text_query') {
+        this.store.dispatch(new ImmersiveSimulatorAction("$any:" + event.data.query))
+
+      } else if (event.data.type === 'output_tts') {
+
+        const requestId: string = event.data.requestId;
+        const tts: string = event.data.tts;
+
+        this.textToSpeechQueue.messages$.next({
+          requestId: requestId,
+          speech: tts
+        } as TextToSpeechRequest);
+
+        /** 
+        this.textToSpeechService.playAudio(requestId, tts)
+          .then((requestId: string) => {
+            this.sendOutputTtsStatus(requestId, "END");
+          })
+          .catch((err) => {
+            console.log("IMMERSIVE SIMULATOR TTS ERROR", err);
+            this.sendOutputTtsStatus(requestId, "END");
+          });
+          */
+      } else if (event.data.type === 'onUpdateDone') {
+
+      } else if (event.data.type === 'exit') {
+
+      }
+    }
   }
-
-  handleResponse(response: DialogflowResponse) {
-
+  sendOutputTtsStatus(requestId: string, status: string) {
+    if (!this.child) return;
+    this.child.postMessage({
+      type: "OutputTtsStatus",
+      requestId: requestId,
+      status: status
+    }, "*");
+  }
+  sendMessage(message: any) {
+    if (!this.child) return;
+    console.log("IMMERSIVE SIMULATOR sendMessage", message);
+    this.child.postMessage(message, "*");
   }
 }
