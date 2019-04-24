@@ -12,6 +12,7 @@ import { DialogflowUserOptions } from '../dialogflow-user-options';
 import { DialogflowSession } from '../dialogflow-session';
 
 import { environment } from 'src/environments/environment';
+import { TextToSpeechService } from '../text-to-speech.service';
 
 const ALLOW_CUSTOM_STAGE: boolean = environment.allowCustomStage;
 const CUSTOM_STAGE_DEFAULT: boolean = environment.customStageDefault;
@@ -46,6 +47,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     public dialogflowUserService: DialogflowUserService,
     public dialogflowSessionService: DialogflowSessionService,
     public projectConfigService: ProjectConfigService,
+    public textToSpeechService: TextToSpeechService,
     public conversationService: ConversationService) { }
 
   ngOnInit() {
@@ -68,6 +70,13 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
   get users(): DialogflowUser[] {
     return this.dialogflowUserService.users;
+  }
+  toggleSound() {
+    if (this.textToSpeechService.muted) {
+      this.textToSpeechService.sound(true);
+    } else {
+      this.textToSpeechService.sound(false);
+    }
   }
   addUser(values: any) {
     const options: DialogflowUserOptions = {
