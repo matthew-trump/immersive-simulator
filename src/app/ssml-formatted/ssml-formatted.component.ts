@@ -22,7 +22,11 @@ export class SsmlFormattedComponent implements OnInit {
   }
   playAudio() {
     console.log("PLAY AUDIO")
-    this.textToSpeechService.playAudio(this.ssml);
+    this.textToSpeechService.playAudio("0", this.ssml)
+      .catch((err: any) => {
+        console.log("ERROR PLAYING AUDIO", err);
+      })
+
   }
   foo() {
     console.log("FOO2");
