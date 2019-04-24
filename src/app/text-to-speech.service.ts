@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { BackendApiService } from './backend-api.service';
 import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
@@ -10,6 +10,8 @@ const SIMULATE_AUDIO_TEST_MILLISECONDS: number = -1;
 })
 export class TextToSpeechService {
   public audio: HTMLAudioElement;
+  public muted: boolean = false;
+  public playing: boolean = false;
   urlMap: any = {};
 
   constructor(private backendApiService: BackendApiService) { }
@@ -17,8 +19,15 @@ export class TextToSpeechService {
   getQueue() {
     return new TextToSpeechQueue(this);
   }
+  sound(on: boolean) {
+    if (this.audio) {
+      this.audio.muted = !on;
+    }
+    this.muted = !on;
+  }
 
   playAudio(requestId: string, tts: string): Promise<any> {
+
     return new Promise((resolve, reject) => {
       if (SIMULATE_AUDIO_TEST_MILLISECONDS > 0) {
         setTimeout(() => {
@@ -30,10 +39,14 @@ export class TextToSpeechService {
           if (result.url) {
             this.audio = new Audio();
             const audio = this.audio;
+            audio.muted = this.muted;
             audio.src = result.url;
             audio.load();
             audio.play();
+            this.playing = true;
+            const c = this;
             audio.onended = () => {
+              c.playing = false;
               resolve(requestId);
             }
           } else {
