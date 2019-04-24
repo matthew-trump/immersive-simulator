@@ -38,6 +38,7 @@ import { SsmlFormattedComponent } from './ssml-formatted/ssml-formatted.componen
 import { ConversationOutputBasicCardItemComponent } from './conversation-output-basic-card-item/conversation-output-basic-card-item.component';
 import { SimpleSimulatorComponent } from './simple-simulator/simple-simulator.component';
 import { ImmersiveSimulatorComponent } from './immersive-simulator/immersive-simulator.component';
+import { AudioWaveComponent } from './audio-wave/audio-wave.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ImmersiveSimulatorComponent } from './immersive-simulator/immersive-sim
     ConversationOutputBasicCardItemComponent,
     SimpleSimulatorComponent,
     ImmersiveSimulatorComponent,
-    SafePipe
+    SafePipe,
+    AudioWaveComponent
   ],
   imports: [
     BrowserModule,
