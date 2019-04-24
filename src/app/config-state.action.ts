@@ -22,3 +22,14 @@ export class ProjectAction implements Action {
         }
     }
 }
+
+export class ImmersiveSimulatorMessageAction implements Action {
+    public readonly type: string = ACTIONS.IMMERSIVE_SIMULATOR_MESSAGE;
+    public payload: any;
+
+    constructor(event: MessageEvent) {
+        this.payload = {
+            event: event
+        }
+    }
+}
