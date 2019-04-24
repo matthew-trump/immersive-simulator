@@ -33,6 +33,13 @@
         margin-left: 0.5em;
 
         >li{
+            h4{
+                margin-top: 0.2em;
+                margin-bottom: 0.2em;
+                color: #666;
+                font-weight: normal;
+                font-size: 1.0em;
+            }
             border-top: 1px dotted #999;
             padding-top: 0.2em;
             margin-top: 0.5em;
@@ -40,10 +47,20 @@
     }
 }
 .suggestions{
+    margin-top: 0.6em;
+    margin-left: 0.5em;
+    border-top: 1px dotted #999;
     label{
         color: blue;
         opacity: 0.8;
         font-size: 0.8em;
+    }
+    h4{
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+        color: #666;
+        font-weight: normal;
+        font-size: 1.0em;
     }
     ul{
         display: flex;
