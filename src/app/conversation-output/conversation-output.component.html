@@ -19,12 +19,17 @@
           <ul>
             <li *ngFor="let item of response.items">
               <ng-container *ngIf="item.type===ITEM_TYPES.SIMPLE">
+                <h4>simpleResponse</h4>
                 <conversation-output-simple-item [item]="item"></conversation-output-simple-item>
               </ng-container>
+
               <ng-container *ngIf="item.type===ITEM_TYPES.IMMERSIVE">
+                <h4>immersiveResponse</h4>
                 <conversation-output-immersive-item [item]="item"></conversation-output-immersive-item>
               </ng-container>
               <ng-container *ngIf="item.type===ITEM_TYPES.BASIC_CARD">
+                <h4>basicCard</h4>
+
                 <conversation-output-basic-card-item [item]="item"></conversation-output-basic-card-item>
               </ng-container>
             </li>
@@ -33,7 +38,7 @@
         </li>
 
         <li class="suggestions" *ngIf="response.suggestions">
-          <label>suggestions</label>
+          <h4>suggestions</h4>
           <ul>
             <li *ngFor="let suggestion of response.suggestions">
               <span>{{suggestion.title}}</span>
