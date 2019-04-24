@@ -1,3 +1,7 @@
-<p>
-  immersive-simulator works!
-</p>
+<div class="simulator">
+  <ng-container *ngIf="(immersiveSimulator.url$|async) as url">
+    <iframe id="iframe" [src]="url | safe" (load)="iframeLoaded()" [height]="iframe.height"
+      [width]="iframe.width"></iframe>
+  </ng-container>
+
+</div>
