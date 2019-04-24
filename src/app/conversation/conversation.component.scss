@@ -15,12 +15,7 @@
             height: 700px;
         }
     }
-    .output{
-        font-weight: normal;
-        width: 500px;
 
-
-    }
    
 }
 .controls{
@@ -33,6 +28,13 @@
     margin-left: 1.7em;
 }
 
+.output{
+    font-weight: normal;
+    margin-right: 3em;
+    height: 400px;
+    overflow: scroll;
+
+}
 
 
 .user{
