@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BackendApiService } from './backend-api.service';
-import { tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+import { TextToSpeechQueue } from './text-to-speech-queue';
 
-const SIMULATE_AUDIO_TEST_MILLISECONDS: number = 5000;
+const SIMULATE_AUDIO_TEST_MILLISECONDS: number = -1;
 @Injectable({
   providedIn: 'root'
 })
@@ -12,8 +14,11 @@ export class TextToSpeechService {
 
   constructor(private backendApiService: BackendApiService) { }
 
+  getQueue() {
+    return new TextToSpeechQueue(this);
+  }
 
-  fromChild(requestId: number, tts: string): Promise<any> {
+  playAudio(requestId: string, tts: string): Promise<any> {
     return new Promise((resolve, reject) => {
       if (SIMULATE_AUDIO_TEST_MILLISECONDS > 0) {
         setTimeout(() => {
@@ -31,29 +36,13 @@ export class TextToSpeechService {
             audio.onended = () => {
               resolve(requestId);
             }
+          } else {
+            reject("AUDIO URL NOT FOUND");
           }
         }).catch((err: any) => {
-          reject();
+          reject(err);
         })
       }
-    })
-  }
-
-  playAudio(ssml: string) {
-    this.getAudioUrl(ssml).then((result: any) => {
-      console.log("SSML RESULT", result);
-      if (result.url) {
-        this.audio = new Audio();
-        const audio = this.audio;
-        audio.src = result.url;
-        audio.load();
-        audio.play();
-        audio.onended = () => {
-          console.log("AUDIO DONE PLAYING");
-        }
-      }
-    }).catch((err: any) => {
-      console.log("SSML ERROR", err);
     })
   }
   async getAudioUrl(ssml: string): Promise<any> {
@@ -66,6 +55,9 @@ export class TextToSpeechService {
           if (result.url) {
             this.urlMap[ssml] = result.url;
           }
+        }),
+        catchError((err: any) => {
+          return of(null)
         })
       ).toPromise();
   }
