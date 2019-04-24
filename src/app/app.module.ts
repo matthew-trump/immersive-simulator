@@ -22,9 +22,9 @@ import { AuthGuard } from './auth.guard';
 import { AppRoutingModule } from './app-routing.module';
 import { ConfigStateReducer } from './config-state.reducer';
 import { ProjectReducer } from './project.reducer';
+import { ImmersiveSimulatorMessageReducer } from './immersive-simulator-message.reducer';
 
-
-
+import { SafePipe } from './safe.pipe';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -52,12 +52,13 @@ import { ImmersiveSimulatorComponent } from './immersive-simulator/immersive-sim
     SsmlFormattedComponent,
     ConversationOutputBasicCardItemComponent,
     SimpleSimulatorComponent,
-    ImmersiveSimulatorComponent
+    ImmersiveSimulatorComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({ config: ConfigStateReducer, project: ProjectReducer }),
+    StoreModule.forRoot({ config: ConfigStateReducer, project: ProjectReducer, immersiveSimulator: ImmersiveSimulatorMessageReducer }),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
