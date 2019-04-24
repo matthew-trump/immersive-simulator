@@ -1,31 +1,19 @@
 <div class="conversation" *ngIf="(projectConfigService.project$|async) as project">
 
   <div class="display">
-    <mat-tab-group>
-
-      <mat-tab label="Simulator">
-
-        <mat-slide-toggle [(ngModel)]="simulatorOn">on</mat-slide-toggle>
-
-        <div class="simulator" *ngIf="simulatorOn">
-          <ng-container *ngIf="!customStage">
-            <simple-simulator></simple-simulator>
-          </ng-container>
-          <ng-container *ngIf="customStage">
-
-          </ng-container>
-        </div>
-      </mat-tab>
-
-      <mat-tab label="Output">
-        <div class="output">
-          <conversation-output></conversation-output>
-        </div>
-
-      </mat-tab>
 
 
-    </mat-tab-group>
+
+
+    <div class="simulator" *ngIf="simulatorOn">
+      <ng-container *ngIf="!customStage">
+        <simple-simulator></simple-simulator>
+      </ng-container>
+      <ng-container *ngIf="customStage">
+        <immersive-simulator></immersive-simulator>
+      </ng-container>
+    </div>
+
 
   </div>
 
@@ -76,16 +64,14 @@
         <button mat-raised-button (click)="newUser=false">cancel</button>
 
       </div>
-
-
     </div>
 
 
     <div class="session" *ngIf="user">
-      <h3>session</h3>
       <div *ngIf="!session" class="sessionControls">
         <button mat-raised-button (click)="invoke()">invoke app</button>
         <mat-slide-toggle *ngIf="allowCustomStage" [(ngModel)]="customStage">custom stage</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="simulatorOn">simulator on</mat-slide-toggle>
       </div>
 
       <div *ngIf="session">
@@ -115,6 +101,11 @@
         </ul>
       </div>
     </div>
+
+    <div class="output">
+      <conversation-output></conversation-output>
+    </div>
+
 
   </div>
 </div>
