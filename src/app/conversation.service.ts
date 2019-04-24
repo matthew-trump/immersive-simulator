@@ -57,10 +57,9 @@ export class ConversationService {
     this.store.select('immersiveSimulator')
       .pipe(
         tap((state: any) => {
-          if (state.event) {
-            this.handleSimulatorMessage(state.event);
+          if (state.query) {
+            this.sendQuerytoDialogflow(state.query);
           }
-
         })
       ).subscribe();
 
@@ -135,41 +134,8 @@ export class ConversationService {
         console.log("ConversationService.query ERROR", err);
       })
   }
-  handleSimulatorMessage(event: MessageEvent) {
 
-    if (event && event.data) {
 
-      if (event.data.type === 'onload') {
-        console.log("ConversationService CANVAS APP LOADED");
-        this.immersiveSimulator.loaded();
-
-      } else if (event.data.type === 'send_text_query') {
-        this.sendQuerytoDialogflow("$any:" + event.data.query);
-
-      } else if (event.data.type === 'output_tts') {
-
-        const requestId: number = event.data.requestId;
-        const tts: string = event.data.tts;
-
-        this.textToSpeechService.fromChild(requestId, tts)
-          .then((requestId: number) => {
-            this.immersiveSimulator.childService
-              .sendOutputTtsStatus(requestId, "END");
-          })
-          .catch((err) => {
-            console.log("CHILD SERVICE TTS ERROR", err);
-            this.immersiveSimulator.childService
-              .sendOutputTtsStatus(requestId, "END");
-          });
-
-      } else if (event.data.type === 'onUpdateDone') {
-
-      } else if (event.data.type === 'exit') {
-
-      }
-    }
-
-  }
   quit() {
     this.immersiveSimulator.reset();
     this.dialogflowService.sendTextQuery(this.options.project.id, "quit").toPromise()
