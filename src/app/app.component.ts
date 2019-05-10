@@ -65,6 +65,7 @@ export class AppComponent {
   updateTarget() {
     console.log("SELECTION CHANGE TARGET", this.current.targetName);
     const target: any = this.config.targets[this.current.targetName];
+    this.backendApiService.target = this.current.targetName;
     const projects: string[] = target.projects;
     this.projects$.next(projects);
     this.resetProject(projects);

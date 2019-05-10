@@ -78,8 +78,9 @@
     <div class="session" *ngIf="user">
       <div *ngIf="!session" class="sessionControls">
         <button mat-raised-button (click)="invoke()">invoke app</button>
-        <mat-slide-toggle *ngIf="allowCustomStage" [(ngModel)]="customStage">custom stage</mat-slide-toggle>
         <mat-slide-toggle [(ngModel)]="simulatorOn">simulator on</mat-slide-toggle>
+        <mat-slide-toggle *ngIf="allowCustomStage" [(ngModel)]="customStage">custom stage</mat-slide-toggle>
+
       </div>
 
       <div *ngIf="session">
