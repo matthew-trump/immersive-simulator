@@ -1,6 +1,6 @@
 # Dialogflow Testing Tool
 
-This respository contains a testing framework that I developed as part of the creation of a Google Assistant application. The application uses Dialogflow, and contains both a traditional (Simple Response) interface on Google Assistant, as well as an Immersive Response capability on surfaces that support such [Interactive Canvas](https://developers.google.com/actions/interactivecanvas/).
+This respository contains a testing framework that I developed as part of the creation of a Google Assistant application. The application uses Dialogflow, and contains both a traditional (Simple Response) interface on Google Assistant, as well as an Immersive Response capability on surfaces that support such [Interactive Canvas](https://developers.google.com/actions/interactivecanvas/), i.e. a dual application such as this:
 
 ![Dialogflow Dual App](img/google-assistant-stack-basic.png)
 
