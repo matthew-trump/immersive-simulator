@@ -1,4 +1,7 @@
-# DialogflowTestingToolFrontend
+# Dialogflow Testing Tool
+
+![Dialogflow Dual App](img/google-assistant-stack-basic.png)
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.9.
 
