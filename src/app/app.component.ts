@@ -11,7 +11,10 @@ import { environment } from 'src/environments/environment'
 import { ProjectConfigService } from './project-config.service';
 
 const TITLE: string = 'Dialogflow Testing Tool';
-
+interface AppConfigurationState {
+  targetName: string,
+  projectName: string
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,7 +26,7 @@ export class AppComponent {
   public config: any;
   public targets$: BehaviorSubject<string[]> = new BehaviorSubject(null);
   public projects$: BehaviorSubject<string[]> = new BehaviorSubject(null);
-  public current: any = {
+  public current: AppConfigurationState = {
     targetName: null,
     projectName: null
   }
