@@ -4,7 +4,7 @@ This respository contains a testing framework that I developed as part of the cr
 
 In general, one considers such applications to be "dual appications," in that the it provides an Immersive Response to surfaces that support this capability, as well as a traditional, message-scroll Simple Response for surfaces that do notsupport the Custom Stage actions capability.
 
-![Dialogflow Dual App](img/google-assistant-stack-basic.png)
+![Dialogflow Dual App](img/google-assistant-stack-dual.png)
 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.9.
